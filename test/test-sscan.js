@@ -296,7 +296,8 @@ describe('Scanner', function () {
 describe('sscan', function() {
   context('with callback', function() {
     it('should get result from return', function() {
-      sscan('a"b"c', function(done, result) {
+      var result = '';
+      sscan('a"b"c', function(done) {
         var ch = this.char();
         if (this.eos()) { return done(); }
 
@@ -304,17 +305,18 @@ describe('sscan', function() {
           this.takeQuote();
           ch = this.char();
         }
-
         result += ch;
         ch = this.next();
-        return result;
-      }, '').should.eql('ac');
+      });
+      result.should.eql('ac');
     });
 
-    it('should get result from done', function() {
-      sscan('a"b"c', function(done, result) {
-        return done('ok');
-      }, '').should.eql('ok');
+    it('should throws', function() {
+      (function() {
+        sscan('a', function() {
+          throw new Error('abc');
+        });
+      }).should.throw('abc');
     });
   });
 

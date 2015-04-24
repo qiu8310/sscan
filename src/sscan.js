@@ -340,13 +340,15 @@
    * @param {Function} [fn]
    * @returns {*}
    */
-  function sscan(str, fn, result) {
+  function sscan(str, fn) {
     var scanner = new Scanner(str);
     if (typeof fn === 'function') {
-      var end = false,
-        done = function(res) { if (res !== undef) { result = res; } end = true; return result; };
-      while (!end) { result = fn.call(scanner, done, result); }
-      return result;
+      var done = function() { throw {scanDone: true} };
+      try {
+        while (true) { fn.call(scanner, done); }
+      } catch (e) {
+        if (!e.scanDone) { throw e; }
+      }
     }
     return scanner;
   }
