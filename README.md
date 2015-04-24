@@ -35,7 +35,7 @@ var scanner;
 scanner = scan('a{www}bc'); // 或者用：scanner = new scan.Scanner('...');
 
 scanner.bos();          // => true   // Begin of String
-scanner.next();         // => 'a'
+scanner.next();         // => '{'
 scanner.takeObject();   // => '{www}'
 scanner.takeWord();     // => 'bc'
 scanner.eos();          // => true  // End of String
