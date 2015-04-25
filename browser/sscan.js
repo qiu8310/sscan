@@ -55,7 +55,7 @@
 
 	'use strict';
 
-	(function(undef) {
+	(function(global, undef) {
 	  /**
 	   * One character
 	   *
@@ -364,6 +364,14 @@
 	      return pass;
 	    },
 
+
+	    /**
+	     *  Peek next one or specified length
+	     */
+	    peek: function(len) {
+	      return this.str.substr(this.pos, len || 1);
+	    },
+
 	    /**
 	     * Get peek of the rest string.
 	     *
@@ -402,10 +410,10 @@
 	  sscan.Scanner = Scanner;
 
 	  // Export to window and node
-	  if (typeof window !== 'undefined') { window.sscan = sscan; }
+	  global.sscan = sscan;
 	  module.exports = sscan;
 
-	})();
+	})(this);
 
 
 /***/ }
