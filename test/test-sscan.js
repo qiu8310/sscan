@@ -148,6 +148,19 @@ describe('Scanner', function () {
     });
   });
 
+  context('#peek( [length] )', function() {
+    it('should return the next length string', function() {
+      s = new Scanner('ab de');
+      s.peek().should.eql('a');
+      s.peek(2).should.eql('ab');
+      s.takeWord();
+      s.peek().should.eql(' ');
+      s.next();
+      s.takeWord();
+      s.peek().should.eql('');
+    });
+  });
+
   context('#peekRest( )', function() {
     it('should return the rest string', function() {
       s = new Scanner('ab de');
