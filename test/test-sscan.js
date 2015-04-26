@@ -151,10 +151,12 @@ describe('Scanner', function () {
   context('#peek( [length] )', function() {
     it('should return the next length string', function() {
       s = new Scanner('ab de');
-      s.peek().should.eql('a');
-      s.peek(2).should.eql('ab');
+      s.peek().should.eql('b');
+      s.peek(2).should.eql('b ');
+      s.peek(3).should.eql('b d');
+      s.peek(20).should.eql('b de');
       s.takeWord();
-      s.peek().should.eql(' ');
+      s.peek().should.eql('d');
       s.next();
       s.takeWord();
       s.peek().should.eql('');
