@@ -369,7 +369,7 @@
 	     *  Peek next one or specified length
 	     */
 	    peek: function(len) {
-	      return this.str.substr(this.pos, len || 1);
+	      return this.str.substr(this.pos + 1, len || 1);
 	    },
 
 	    /**
