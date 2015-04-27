@@ -48,11 +48,20 @@ describe('Scanner', function () {
       s.isChar('()').should.eql(true);
       s.isChar(function(c) { return c === '(' }).should.eql(true);
       s.isChar(function(c) { return c === ')' }).should.eql(false);
+    });
 
+    it('should always return false if is eos', function() {
+      s = new Scanner('');
+      s.isChar(function() {return true;}).should.eql(false);
+
+      s = new Scanner('ba');
+      s.takeWord();
+      s.isChar(/[a-z]/).should.eql(false);
+      s.isChar('ab').should.eql(false);
     });
 
     it('should throws when argument type not acceptable', function() {
-      s = new Scanner('');
+      s = new Scanner('avc');
       (function() {s.isChar(123); }).should.throw('Character matcher "123" not acceptable.');
     });
   });
@@ -229,13 +238,23 @@ describe('Scanner', function () {
 
   });
 
-  context('#takePair( left, right [, quoteMode] )', function() {
+  context('#takePair( left [, right] [, quoteMode] )', function() {
     it('should take paired string', function() {
       s = new Scanner('<abc>');
       s.takePair('<', '>').should.eql('<abc>');
       s = new Scanner('<>');
       s.takePair('<', '>').should.eql('<>');
     });
+    it('should support same left right pair', function() {
+      s = new Scanner('`abc`d');
+      s.takePair('`').should.eql('`abc`');
+      s.reset();
+      s.takePair('`', '`').should.eql('`abc`');
+
+      new Scanner('"a\'b"').takePair('"').should.eql('"a\'b"');
+      new Scanner('\'\'').takePair('\'').should.eql('\'\'');
+    });
+
     it('should take deep paired string', function() {
       s = new Scanner('<a<<b>c>>');
       s.takePair('<', '>').should.eql('<a<<b>c>>');

@@ -203,9 +203,14 @@ s.takeQuote();  // => '"are"'
 s.peekRest();   // => ' you'
 ```
 
-### takePair( left, right [, quoteMode] )
+### takePair( left [, right] [, quoteMode] )
 
 类似于 `Scanner.takeQuote`，但它是匹配像 `[]`, `{}`, `<>` 这种成对出现的字符的。
+
+支持 left === right 的模式，即 takePair('|', '|') 会匹配两个 '|' 之间的字符串，
+同理它也能匹配像引号这类字符，所以它包含了 takeQuote 的功能了 (v0.2.0 新加功能）。
+
+如果没有匹配成功会抛出 EOS 异常。
 
 - 默认的 `quoteMode` 为 `'all'`，即如果 `left` 或 `right` 中的字符出现在引号中，会忽略掉它；
 - 如果 `quoteMode` 为 `'single'`，即只有 `left` 或 `right` 中的字符出现在单引号中才会忽略；
@@ -220,6 +225,9 @@ s.takePair('{', '}');             // => '{"a}"}'
 
 s.reset();
 s.takePair('{', '}', 'single');   // => '{"a}'  // 只有单引号才算引号，双引号被当作普通字符
+
+// v0.2.0 新功能
+new Scanner('|abc| def').takePair('|');   // => '|abc|'
 
 ```
 
