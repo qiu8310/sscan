@@ -89,6 +89,7 @@
 	     */
 	    match = function(ch, charMatcher) {
 	      var type = typeof charMatcher;
+	      if (!ch) { return false; } // 字符结束后 ch 是空字符串，这时常被用来比较
 	      if (type === 'string') {
 	        return charMatcher.indexOf(ch) >= 0;
 	      } else if (type === 'function') {
@@ -291,16 +292,22 @@
 	     * Take pair things, line {...}, [...]
 	     *
 	     * @param {Char} left
-	     * @param {Char} right
+	     * @param {Char} [right]
 	     * @param {String} [quoteMode='all'] - single, double, all, none
 	     */
 	    takePair: function(left, right, quoteMode) {
+	      if (!right) { right = left; }
+
+	      if (left === right && (left === '"' || left === '\'')) {
+	        return this.takeQuote(quoteMode);
+	      }
+
 	      var ch = this.next(left);
 	      var count = 1, result = left;
 	      var quotes = quoteModes[quoteMode] || quoteModes.all;
 
 	      while (count !== 0) {
-	        count += left === ch ? 1 : (right === ch ? -1 : 0);
+	        count += right === ch ? -1 : (left === ch ? 1 : 0);
 
 	        if (quotes[ch]) {
 	          result += this.takeQuote(quoteMode);
